@@ -13,7 +13,25 @@ public class ChopStick {
         myNumber = ++stickCount;
     }
 
-    // ...
+    synchronized void take() throws InterruptedException{
+        while(!iAmFree){
+            wait();
+        }
+        assert(iAmFree);
+        this.iAmFree = false;
+        System.out.printf("La baguette"+myNumber+"est prise");
+        notifyAll();
+    }
+    
+    synchronized void  release() throws InterruptedException{
+        while(iAmFree){
+            wait();
+        }
+        assert(!iAmFree);
+        this.iAmFree = true;
+        System.out.printf("La baguette"+myNumber+"est rendue");
+        notifyAll();
+    }
     
     @Override
     public String toString() {
